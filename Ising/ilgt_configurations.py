@@ -13,7 +13,7 @@ J=1.        #only parameter of the Hamiltonian
 N_low = 1000   #number of configurations at low (=0) temperature
 N_high= 1000   #number of configurations at high (=np.inf) temperature
 
-training_data = False 
+training_data = True 
 
 def initialize():
     '''
@@ -161,7 +161,7 @@ while not_yet:
 for i in range(N_low*Nupdate):
     vertex_update(spins)
     if i%Nupdate==0:
-        configs.append(np.reshape(spins.copy(), N*N*2))
+        configs.append(spins.copy())
         labels.append(0)
 
 
@@ -178,7 +178,7 @@ for i in range(N_high*Nupdate):
     single_spin_update(spins, np.inf)
     vertex_update(spins)
     if i%Nupdate==0:
-        configs.append(np.reshape(spins.copy(), N*N*2))
+        configs.append(spins.copy())
         labels.append(1)
 
 if training_data: 
