@@ -1,16 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_Ising_configuration(spins):
+def plot_Ising_configuration(spins, ax=None):
     '''
 
     this is just a helper function to plot the configuration of spins  given by 'spins'
 
     '''
+    if ax==None:
+        print("problem")
+        ax = plt.gca()
     N = np.shape(spins)[1]
-    fig, ax = plt.subplots()
-    fig.add_axes()
-    ax = fig.axes[0]
     for i in range(N):
         ax.plot([i, i], [0,N-1], 'k')
         ax.plot([0,N-1], [i,i], 'k')
@@ -18,15 +18,12 @@ def plot_Ising_configuration(spins):
     colors = ['b', 'gold'] # note: blue is down, red is up!
     for i in range(N):
         for j in range(N):
-            fig.gca().add_patch(plt.Circle((i,j), radius=0.35, fc=colors[int((spins[i,j]+1)/2.)]))
+            ax.add_patch(plt.Circle((i,j), radius=0.35, fc=colors[int((spins[i,j]+1)/2.)]))
 
+    ax.axes.set_axis_off()
     ax.set_ylim(-1,N+1)
     ax.set_xlim(-1,N+1)
     ax.set_aspect('equal')
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.axis('off')
-    fig.show()
 
 
 def plot_ILGT_configuration(spins, dual=False):
