@@ -26,7 +26,7 @@ def plot_Ising_configuration(spins, ax=None):
     ax.set_aspect('equal')
 
 
-def plot_ILGT_configuration(spins, dual=False):
+def plot_ILGT_configuration(spins, dual=False, ax=None):
     '''
 
     this is just a helper function to plot the configuration of spins  given by 'spins'
@@ -39,11 +39,11 @@ def plot_ILGT_configuration(spins, dual=False):
         spin configuration, dimension is NxNx2
     dual   :  bool
         Plot the configuration in dual space or not. Default is False.
+    ax     :  an axes object for plotting
     '''
+    if ax == None:
+        ax = plt.gca()
     N = np.shape(spins)[1]
-    fig, ax = plt.subplots()
-    fig.add_axes()
-    ax = fig.axes[0]
     for i in range(N+1):
         ax.plot([i, i], [0,N], 'k')
         ax.plot([0,N], [i,i], 'k')
@@ -51,11 +51,11 @@ def plot_ILGT_configuration(spins, dual=False):
     if not dual:
         colors = ['b', 'gold'] # note: blue is down, red is up!
         for i in range(N):
-            fig.gca().add_patch(plt.Circle((0,i+0.5), radius=0.2, fc=colors[int((spins[-1,i,0]+1)/2.)]))
-            fig.gca().add_patch(plt.Circle((i+0.5,0), radius=0.2, fc=colors[int((spins[i,-1,1]+1)/2.)]))
+            ax.add_patch(plt.Circle((0,i+0.5), radius=0.2, fc=colors[int((spins[-1,i,0]+1)/2.)]))
+            ax.add_patch(plt.Circle((i+0.5,0), radius=0.2, fc=colors[int((spins[i,-1,1]+1)/2.)]))
             for j in range(N):
-                fig.gca().add_patch(plt.Circle((i+1,j+0.5), radius=0.2, fc=colors[int((spins[i,j,0]+1)/2.)]))
-                fig.gca().add_patch(plt.Circle((i+0.5,j+1), radius=0.2, fc=colors[int((spins[i,j,1]+1)/2.)]))
+                ax.add_patch(plt.Circle((i+1,j+0.5), radius=0.2, fc=colors[int((spins[i,j,0]+1)/2.)]))
+                ax.add_patch(plt.Circle((i+0.5,j+1), radius=0.2, fc=colors[int((spins[i,j,1]+1)/2.)]))
 
     if dual:
         excitation = []
@@ -69,14 +69,10 @@ def plot_ILGT_configuration(spins, dual=False):
                 if spins[i,j,1]==1: ax.plot([i+0.5, i+0.5], [j+0.5, j+1.5], 'b', lw=3)
                 if spins[i,j, 0]*spins[i_left, j, 0]*spins[i,j,1]*spins[i,j_up, 1]==-1: excitation.append([i+0.5,j+0.5])
         if len(excitation)>0: plt.scatter(np.array(excitation)[:,0], np.array(excitation)[:,1], color='red', s=350, marker=(5,1))
+    ax.axes.set_axis_off()
     ax.set_ylim(-1,N+1)
     ax.set_xlim(-1,N+1)
     ax.set_aspect('equal')
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.axis('off')
-    fig.show()
-
 
 def create_periodic_padding(configs, kernel_size):
     N = np.shape(configs)[1]
